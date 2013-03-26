@@ -45,8 +45,7 @@ class ConditionalOffer(models.Model):
         _("Name"), max_length=128, unique=True,
         help_text=_("This is displayed within the customer's basket"))
     slug = models.SlugField(_("Slug"), max_length=128, unique=True, null=True)
-    description = models.TextField(
-        _("Description"), blank=True, null=True,
+    description = models.TextField(_("Description"), blank=True,
         help_text=_("This is displayed on the offer browsing page"))
 
     # Offers come in a few different types:
@@ -384,8 +383,8 @@ class Condition(models.Model):
     value = PositiveDecimalField(_('Value'), decimal_places=2, max_digits=12,
                                  null=True, blank=True)
 
-    proxy_class = models.CharField(_("Custom class"), null=True, blank=True,
-                                   max_length=255, unique=True, default=None)
+    proxy_class = models.CharField(_("Custom class"), blank=True,
+                                   max_length=255, unique=True)
 
     class Meta:
         verbose_name = _("Condition")
@@ -486,8 +485,7 @@ class Benefit(models.Model):
         (SHIPPING_PERCENTAGE, _("Discount is a percentage off of the shipping cost")),
     )
     type = models.CharField(
-        _("Type"), max_length=128, choices=TYPE_CHOICES, null=True,
-        blank=True)
+        _("Type"), max_length=128, choices=TYPE_CHOICES, blank=True)
 
     # The value to use with the designated type.  This can be either an integer
     # (eg for multibuy) or a decimal (eg an amount) which is slightly
@@ -504,8 +502,8 @@ class Benefit(models.Model):
 
     # A custom benefit class can be used instead.  This means the
     # type/value/max_affected_items fields should all be None.
-    proxy_class = models.CharField(_("Custom class"), null=True, blank=True,
-                                   max_length=255, unique=True, default=None)
+    proxy_class = models.CharField(_("Custom class"), blank=True,
+                                   max_length=255, unique=True)
 
     class Meta:
         verbose_name = _("Benefit")
@@ -699,8 +697,7 @@ class Range(models.Model):
 
     # Allow a custom range instance to be specified
     proxy_class = models.CharField(
-        _("Custom class"), null=True, blank=True, max_length=255,
-        default=None, unique=True)
+        _("Custom class"), blank=True, max_length=255, unique=True)
 
     date_created = models.DateTimeField(_("Date Created"), auto_now_add=True)
 
@@ -778,7 +775,7 @@ class Range(models.Model):
         """
         Test whether this product can be edited in the dashboard
         """
-        return self.proxy_class is None
+        return not self.proxy_class
 
 
 # ==========
